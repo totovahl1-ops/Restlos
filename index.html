@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf7f2">
+  <title>Restlos – Resteküche</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: {
+        sage: { 50: '#f3f6f1', 100: '#e4ebdf', 200: '#c9d7c0', 300: '#a7bd9a', 400: '#86a376', 500: '#6a875b', 600: '#536b47', 700: '#43553a', 800: '#384631', 900: '#2f3a2a' },
+        tomato: { 50: '#fdf3ee', 100: '#fbe3d8', 200: '#f6c6b0', 500: '#e0704a', 600: '#c95a36', 700: '#a8472a' },
+        cream: '#faf7f2', ink: '#1f2a1c',
+      },
+      fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'], display: ['Fraunces', 'Georgia', 'serif'] },
+      boxShadow: { soft: '0 1px 2px rgba(31,42,28,.04), 0 10px 30px -12px rgba(47,58,42,.22)' },
+    } } };
+  </script>
+  <style type="text/tailwindcss">
+    @layer components {
+      .card { @apply flex flex-col rounded-[1.75rem] bg-white p-5 shadow-soft ring-1 ring-sage-100/70; }
+      .h3 { @apply font-display text-xl font-bold text-sage-900; }
+      .btn-accent { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-tomato-500 px-5 font-extrabold text-white shadow-lg shadow-tomato-500/30 transition hover:bg-tomato-600 active:scale-[.98]; }
+      .btn-primary { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-sage-800 px-5 font-bold text-white transition hover:bg-sage-900 active:scale-[.98]; }
+      .btn-ghost { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-white px-5 font-bold text-sage-800 ring-1 ring-sage-200 transition hover:bg-sage-50 active:scale-[.98]; }
+      .input { @apply min-h-[48px] w-full rounded-2xl border-0 bg-sage-50 px-4 text-base ring-1 ring-sage-200 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500; }
+      .chip { @apply inline-flex min-h-[42px] items-center gap-1 rounded-2xl border pl-3 pr-1 text-sm font-bold; }
+      .chip-x { @apply grid h-8 w-8 place-items-center rounded-full text-lg leading-none opacity-50 hover:bg-black/5 hover:opacity-100; }
+      .quick { @apply inline-flex min-h-[42px] items-center gap-1.5 rounded-2xl bg-sage-50 px-3 text-sm font-bold text-sage-800 ring-1 ring-sage-100 transition hover:bg-sage-100 active:scale-95; }
+      .quick.on { @apply bg-sage-700 text-white ring-sage-700; }
+      .cat { @apply inline-flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-bold text-sage-600 transition hover:text-sage-900; }
+      .cat.on { @apply bg-sage-900 text-white; }
+      .badge { @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-extrabold shadow-sm; }
+      .diet-tag { @apply inline-flex items-center gap-1 rounded-full bg-sage-50 px-2.5 py-1 text-xs font-bold text-sage-700 ring-1 ring-sage-100; }
+      .tag-missing { @apply rounded-lg bg-tomato-50 px-2 py-1 text-xs font-bold text-tomato-700 ring-1 ring-tomato-100; }
+      .meta { @apply inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 text-sm font-bold text-sage-800 ring-1 ring-sage-100; }
+      .nav-btn { @apply relative flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-bold text-sage-400 transition; }
+      .nav-btn.on { @apply text-sage-900; }
+      .tab { @apply relative rounded-full px-4 py-2 text-sm font-bold text-sage-600 transition hover:text-sage-900; }
+      .tab.on { @apply bg-sage-900 text-white; }
+      .count { @apply ml-1 inline-grid min-w-[1.25rem] place-items-center rounded-full bg-tomato-500 px-1 text-[10px] leading-5 text-white; }
+    }
+  </style>
+  <style>
+    /* Segment-Buttons & Toggles (native Radio/Checkbox) */
+    .seg { display: flex; min-height: 44px; align-items: center; justify-content: center; gap: .35rem; border-radius: .9rem; padding: 0 .5rem; font-size: .875rem; font-weight: 800; text-align: center; cursor: pointer; transition: all .2s }
+    .seg-dark { color: #e4ebdf } .seg-light { color: #536b47 }
+    input:checked + .seg { background: #fff; color: #2f3a2a; box-shadow: 0 2px 8px -2px rgba(31,42,28,.25) }
+    input:checked + .seg-light { background: #43553a; color: #fff }
+    input:focus-visible + .seg, input:focus-visible + .quick { outline: 2px solid #e0704a; outline-offset: 2px }
+    input:checked + .quick { background: #43553a; color: #fff; --tw-ring-color: #43553a }
+    .no-scrollbar { scrollbar-width: none } .no-scrollbar::-webkit-scrollbar { display: none }
+    body { background-image: radial-gradient(circle at 0 0, #eef3ea 0, transparent 40%), radial-gradient(circle at 100% 30%, #fbeee6 0, transparent 35%); background-attachment: fixed }
+
+    /* Micro-Interactions */
+    @keyframes pop { 0% { transform: scale(.6); opacity: 0 } 70% { transform: scale(1.08) } 100% { transform: scale(1); opacity: 1 } }
+    @keyframes fadeUp { from { transform: translateY(16px); opacity: 0 } to { transform: none; opacity: 1 } }
+    @keyframes wobble { 0%, 100% { transform: rotate(-5deg) } 50% { transform: rotate(5deg) } }
+    @keyframes rise { 0% { transform: translateY(0) scale(.6); opacity: 0 } 30% { opacity: 1 } 100% { transform: translateY(-50px) scale(1.2); opacity: 0 } }
+    @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+    @keyframes sheet { from { transform: translateY(40px); opacity: 0 } to { transform: none; opacity: 1 } }
+    .pop { animation: pop .35s ease-out }
+    .fade-up { animation: fadeUp .5s cubic-bezier(.2, .8, .2, 1) both }
+    .float { animation: float 4s ease-in-out infinite }
+    .pot { position: relative; display: inline-block; font-size: 5rem; animation: wobble 1.1s ease-in-out infinite }
+    .bubble { position: absolute; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: #a7bd9a; animation: rise 1.5s ease-in infinite }
+    .bubble:nth-child(1) { left: 20% } .bubble:nth-child(2) { left: 45%; animation-delay: .5s } .bubble:nth-child(3) { left: 70%; animation-delay: 1s }
+    dialog[open] { animation: sheet .3s ease-out }
+    #toast { transition: transform .3s, opacity .3s; transform: translate(-50%, 20px); opacity: 0; pointer-events: none }
+    #toast.show { transform: translate(-50%, 0); opacity: 1 }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important } }
+  </style>
+</head>
+<body class="min-h-screen bg-cream pb-28 font-sans text-ink antialiased lg:pb-10">
+  <header class="sticky top-0 z-20 border-b border-sage-100/60 bg-cream/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+      <div class="flex items-center gap-3">
+        <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-tomato-500 to-tomato-600 text-2xl shadow-lg shadow-tomato-500/30">🥕</span>
+        <div class="leading-tight">
+          <h1 class="font-display text-2xl font-extrabold tracking-tight text-sage-900">Restlos</h1>
+          <p class="text-xs font-semibold text-sage-500">Aus Resten wird Lieblingsessen</p>
+        </div>
+      </div>
+      <nav class="hidden gap-1 rounded-full bg-white p-1 shadow-soft ring-1 ring-sage-100 lg:flex" aria-label="Bereiche">
+        <button data-action="view" data-view="cook" class="tab on">🍲 Kochen</button>
+        <button data-action="view" data-view="favs" class="tab">❤️ Favoriten<span class="count badge-favs hidden"></span></button>
+        <button data-action="view" data-view="shop" class="tab">🛒 Einkauf<span class="count badge-shop hidden"></span></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 pt-5">
+    <!-- ===== Kochen ===== -->
+    <section id="view-cook" class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)] lg:items-start">
+      <div class="min-w-0 space-y-4">
+        <!-- IngredientInput -->
+        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sage-700 via-sage-800 to-sage-900 p-6 text-white shadow-xl shadow-sage-900/20">
+          <div aria-hidden="true" class="float pointer-events-none absolute -right-4 -top-4 rotate-12 select-none text-[7rem] opacity-20">🥬</div>
+          <div aria-hidden="true" class="pointer-events-none absolute -bottom-6 right-16 -rotate-12 select-none text-6xl opacity-10">🍅</div>
+          <p class="text-xs font-extrabold uppercase tracking-[.2em] text-sage-300">Resteküche</p>
+          <h2 class="mt-1 font-display text-3xl font-extrabold leading-tight">Was muss heute weg?</h2>
+          <p id="hero-stats" class="mt-1 text-sm font-semibold text-sage-200"></p>
+          <form id="add-form" class="relative mt-5 flex items-center gap-2 rounded-2xl bg-white p-1.5 shadow-lg" autocomplete="off">
+            <span class="pl-2 text-lg" aria-hidden="true">🔍</span>
+            <label class="sr-only" for="ing-input">Zutat</label>
+            <input id="ing-input" list="ing-list" class="min-h-[44px] min-w-0 flex-1 bg-transparent text-base text-ink placeholder:text-sage-400 focus:outline-none" placeholder="Zutat, z. B. Zucchini" enterkeyhint="done">
+            <button class="btn-accent min-h-[44px] px-4 text-sm">Hinzufügen</button>
+          </form>
+          <datalist id="ing-list"></datalist>
+          <fieldset class="mt-3">
+            <legend class="sr-only">Zustand der Zutat</legend>
+            <div class="grid grid-cols-3 gap-1 rounded-2xl bg-white/10 p-1">
+              <label><input type="radio" name="status" value="frisch" class="sr-only" checked><span class="seg seg-dark">🌿 frisch</span></label>
+              <label><input type="radio" name="status" value="dringend" class="sr-only"><span class="seg seg-dark">⏰ muss weg</span></label>
+              <label><input type="radio" name="status" value="abgelaufen" class="sr-only"><span class="seg seg-dark">⚠️ MHD drüber</span></label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Schnellauswahl -->
+        <div class="card">
+          <h3 class="h3">Schnellauswahl</h3>
+          <div id="cat-tabs" class="no-scrollbar -mx-2 mt-3 flex gap-1 overflow-x-auto px-2 pb-1" role="tablist"></div>
+          <div id="quick-chips" class="mt-3 flex max-h-56 flex-wrap gap-2 overflow-y-auto"></div>
+        </div>
+
+        <!-- Kühlschrank -->
+        <div class="card">
+          <div class="flex items-center justify-between">
+            <h3 class="h3">Dein Kühlschrank</h3>
+            <button data-action="clear-pantry" class="rounded-full px-3 py-1 text-sm font-bold text-sage-500 hover:bg-sage-50">Leeren</button>
+          </div>
+          <div id="pantry-chips" class="mt-3 flex flex-wrap gap-2" aria-live="polite"></div>
+          <p class="mt-3 text-xs text-sage-500">Tipp: Zutat antippen, um den Zustand zu ändern. „Muss weg“ wird bevorzugt verwertet.</p>
+        </div>
+
+        <!-- Ernährung -->
+        <div class="card">
+          <h3 class="h3">Ernährung</h3>
+          <p class="mt-0.5 text-sm text-sage-600">Welche Gerichte sollen vorgeschlagen werden?</p>
+          <fieldset class="mt-3">
+            <legend class="sr-only">Ernährungsform</legend>
+            <div class="grid grid-cols-3 gap-1 rounded-2xl bg-sage-50 p-1 ring-1 ring-sage-100">
+              <label><input type="radio" name="diet-main" value="" class="sr-only"><span class="seg seg-light">🍽️ Alles</span></label>
+              <label><input type="radio" name="diet-main" value="vegetarisch" class="sr-only"><span class="seg seg-light">🥦 Vegetarisch</span></label>
+              <label><input type="radio" name="diet-main" value="vegan" class="sr-only"><span class="seg seg-light">🌱 Vegan</span></label>
+            </div>
+          </fieldset>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <label><input type="checkbox" name="diet" value="laktosefrei" class="sr-only"><span class="quick cursor-pointer">🥛 laktosefrei</span></label>
+            <label><input type="checkbox" name="diet" value="glutenfrei" class="sr-only"><span class="quick cursor-pointer">🌾 glutenfrei</span></label>
+          </div>
+          <details class="group mt-4 rounded-2xl bg-sage-50 p-4 ring-1 ring-sage-100">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-2 font-bold text-sage-800">
+              <span>🚫 Zutaten ausschließen <span id="ex-count" class="text-sm font-semibold text-sage-500"></span></span>
+              <span class="transition group-open:rotate-180">▾</span>
+            </summary>
+            <form id="ex-form" class="mt-3 flex gap-2" autocomplete="off">
+              <label class="sr-only" for="ex-input">Zutat ausschließen</label>
+              <input id="ex-input" class="input bg-white" list="ing-list" placeholder="z. B. Koriander, Pilze">
+              <button class="btn-ghost aspect-square px-0 text-xl" aria-label="Ausschluss hinzufügen">+</button>
+            </form>
+            <div id="ex-chips" class="mt-2 flex flex-wrap gap-2"></div>
+          </details>
+        </div>
+
+        <div class="grid gap-2 sm:grid-cols-[1fr_auto]">
+          <button data-action="find" class="btn-accent min-h-[60px] text-lg">🍳 Jetzt Rezepte finden</button>
+          <button data-action="brave" class="btn-ghost min-h-[60px]">🎲 Ich bin mutig</button>
+        </div>
+      </div>
+
+      <div id="results" class="scroll-mt-24"></div>
+    </section>
+
+    <!-- ===== FavoritesList ===== -->
+    <section id="view-favs" hidden></section>
+
+    <!-- ===== ShoppingList ===== -->
+    <section id="view-shop" class="mx-auto max-w-2xl" hidden></section>
+  </main>
+
+  <nav class="fixed inset-x-0 bottom-0 z-20 border-t border-sage-100 bg-white/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden" aria-label="Bereiche">
+    <div class="mx-auto flex max-w-md">
+      <button data-action="view" data-view="cook" class="nav-btn on"><span class="text-2xl">🍲</span>Kochen</button>
+      <button data-action="view" data-view="favs" class="nav-btn"><span class="text-2xl">❤️</span><span>Favoriten<span class="count badge-favs hidden"></span></span></button>
+      <button data-action="view" data-view="shop" class="nav-btn"><span class="text-2xl">🛒</span><span>Einkauf<span class="count badge-shop hidden"></span></span></button>
+    </div>
+  </nav>
+
+  <!-- RecipeModal -->
+  <dialog id="modal" class="mb-0 max-h-[94vh] w-full max-w-none overflow-y-auto rounded-t-[2rem] bg-cream p-0 text-ink shadow-2xl backdrop:bg-ink/50 backdrop:backdrop-blur-sm sm:mb-auto sm:max-w-2xl sm:rounded-[2rem]"></dialog>
+
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-24 left-1/2 z-50 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-white shadow-xl lg:bottom-8"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
