@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#faf7f2">
   <title>Restlos – Resteküche</title>
   <link rel="manifest" href="manifest.json">
@@ -79,8 +79,8 @@
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important } }
   </style>
 </head>
-<body class="min-h-screen bg-cream pb-28 font-sans text-ink antialiased lg:pb-10">
-  <header class="sticky top-0 z-20 border-b border-sage-100/60 bg-cream/80 backdrop-blur-md">
+<body class="min-h-screen bg-cream pb-[calc(8rem+env(safe-area-inset-bottom))] font-sans text-ink antialiased lg:pb-10">
+  <header class="sticky top-0 z-20 pt-[env(safe-area-inset-top)] border-b border-sage-100/60 bg-cream/80 backdrop-blur-md">
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
         <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-tomato-500 to-tomato-600 text-2xl shadow-lg shadow-tomato-500/30">🥕</span>
@@ -188,7 +188,7 @@
     <section id="view-shop" class="mx-auto max-w-2xl" hidden></section>
   </main>
 
-  <nav class="fixed inset-x-0 bottom-0 z-20 border-t border-sage-100 bg-white/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden" aria-label="Bereiche">
+  <nav class="fixed inset-x-0 bottom-0 z-20 border-t border-sage-100 bg-white/90 pb-[max(env(safe-area-inset-bottom),12px)] backdrop-blur-md lg:hidden" aria-label="Bereiche">
     <div class="mx-auto flex max-w-md">
       <button data-action="view" data-view="cook" class="nav-btn on"><span class="text-2xl">🍲</span>Kochen</button>
       <button data-action="view" data-view="favs" class="nav-btn"><span class="text-2xl">❤️</span><span>Favoriten<span class="count badge-favs hidden"></span></span></button>
@@ -199,7 +199,7 @@
   <!-- RecipeModal -->
   <dialog id="modal" class="mb-0 max-h-[94vh] w-full max-w-none overflow-y-auto rounded-t-[2rem] bg-cream p-0 text-ink shadow-2xl backdrop:bg-ink/50 backdrop:backdrop-blur-sm sm:mb-auto sm:max-w-2xl sm:rounded-[2rem]"></dialog>
 
-  <div id="toast" role="status" aria-live="polite" class="fixed bottom-24 left-1/2 z-50 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-white shadow-xl lg:bottom-8"></div>
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-[calc(7rem+env(safe-area-inset-bottom))] left-1/2 z-50 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-white shadow-xl lg:bottom-8"></div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
